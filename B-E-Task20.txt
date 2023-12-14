@@ -1,0 +1,53 @@
+CREATE DATABASE DrugstoreApp
+USE DrugstoreApp
+
+CREATE TABLE Owiners(
+	Id int PRIMARY KEY IDENTITY(1,1),
+	Name varchar(50) NOT NULL,
+	Surname varchar(50) NOT NULL
+)
+
+CREATE TABLE Drugstores (
+	Id int PRIMARY KEY IDENTITY(1,1),
+	Name varchar(50) NOT NULL,
+	Address varchar(100) unique,
+	CreationDate date DEFAULT GETDATE() CHECK(GETDATE()>=CreationDate),
+	OwinerId int FOREIGN KEY REFERENCES Owiners(Id)
+)
+
+CREATE TABLE Pharmacists (
+	Id int PRIMARY KEY IDENTITY(1,1),
+	Name varchar(50) NOT NULL,
+	Surname varchar(50) NOT NULL,
+	Age int,
+	Exprience int,
+	DrugstoreId int FOREIGN KEY REFERENCES Drugstores(Id)
+)
+
+CREATE TABLE Druges (
+	Id int PRIMARY KEY IDENTITY(1,1),
+	Name varchar(50) NOT NULL,
+	Price decimal,
+	Count int,
+	DrugstoreId int FOREIGN KEY REFERENCES Drugstores(Id)
+)
+
+INSERT INTO Owiners
+VALUES('Samir','Qurbanov')
+
+INSERT INTO Drugstores
+VALUES ('Smart','Baki - Izmir parki','2018-07-20',1)
+
+INSERT INTO Pharmacists
+VALUES ('Elsen','Balakisiyev',19,1,1)
+
+INSERT INTO Druges
+VALUES ('Asprin',0.10,200,1)
+
+SELECT * FROM Owiners
+FULL Join Drugstores
+ON Drugstores.OwinerId=Owiners.Id
+FULL Join Pharmacists
+ON Drugstores.Id=Pharmacists.DrugstoreId
+FULL Join Druges
+ON Pharmacists.Id=Druges.DrugstoreId
